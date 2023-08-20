@@ -1,6 +1,6 @@
 {
   "name": "react-native-gif-controller-view",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "React-native-gif-controller-view is a React Native library that provides comprehensive controls for GIF playback, including play, pause, reverse playback, and color adjustments",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
