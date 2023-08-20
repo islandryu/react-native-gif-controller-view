@@ -1,5 +1,11 @@
 # react-native-gif-controller-view
 
+
+
+https://github.com/islandryu/react-native-gif-controller-view/assets/65934663/ca939c3d-8404-442d-b205-bd7b910208f7
+
+
+
 ## Overview
 
 `GifControllerView` is a component designed for advanced control and manipulation of GIF images in React Native applications. This component offers properties to modify GIF presentation styles, animation controls, and color mappings. Moreover, using the reference methods (`GifControllerViewRef`), developers can fetch detailed color statistics and frame-specific data for any GIF.
