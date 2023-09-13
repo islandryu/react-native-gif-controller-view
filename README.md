@@ -1,10 +1,6 @@
 # react-native-gif-controller-view
 
-
-
 https://github.com/islandryu/react-native-gif-controller-view/assets/65934663/ca939c3d-8404-442d-b205-bd7b910208f7
-
-
 
 ## Overview
 
@@ -54,6 +50,10 @@ If set to `true`, the GIF animates in reverse. If `false`, it animates normally.
 #### `speed` (`number`)
 
 Determines the GIF's playback speed. A value of `1` is the default speed, `2` would be twice as fast, and so on.
+
+#### `disableLoop` (`boolean`)
+
+Controls whether the GIF animation should loop or not. If set to `true`, the GIF will play only once and stop at the last frame. If `false`, the GIF will loop continuously.
 
 ### Ref Methods
 
