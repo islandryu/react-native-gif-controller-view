@@ -10,9 +10,11 @@ class AnimatedGifDrawable constructor(private val gifDecoder: GifDecoder) : Draw
     private val framePaint = Paint()
     private var currentFrameIndex = 0
     private var FromToColorPairs: List<ColorPair>? = null
+    private var disableLoop = false
     class ColorPair(val from: Int, val to: Int)
     var isReverse = false
     var speed = 1.0f
+    var isWaiting = false
 
     private var  isRunning = true
 
@@ -46,6 +48,7 @@ class AnimatedGifDrawable constructor(private val gifDecoder: GifDecoder) : Draw
     private val executor = ScheduledThreadPoolExecutor(1)
 
     override fun draw(canvas: Canvas) {
+        isWaiting = false
         var bitmap = bitmapArray[currentFrameIndex]
         if (bitmap != null) {
             val bounds = Rect(0, 0, canvas.width, canvas.height)
@@ -53,10 +56,19 @@ class AnimatedGifDrawable constructor(private val gifDecoder: GifDecoder) : Draw
             canvas.drawBitmap(bitmap, null, bounds, framePaint)
         }
         val delay = gifDecoder.frames[currentFrameIndex].graphicControlExtension?.delayTime ?: 10
-        if(isRunning) {
-            executor.schedule(updater, (delay.toFloat()*10f*speed).toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
-
+        val isEnd = if(isReverse) {
+            currentFrameIndex == 0
+        } else {
+            currentFrameIndex == gifDecoder.frameCount - 1
         }
+        if(this.disableLoop && isEnd) {
+          return;
+        }
+        if(!isRunning) {
+            return;
+        }
+        isWaiting = true
+        executor.schedule(updater, (delay.toFloat()*10f*speed).toLong(), java.util.concurrent.TimeUnit.MILLISECONDS)
     }
 
     override fun setAlpha(alpha: Int) {
@@ -110,6 +122,10 @@ class AnimatedGifDrawable constructor(private val gifDecoder: GifDecoder) : Draw
 
     fun setFromToColorPairs(FromToColorPairs: List<ColorPair>) {
         this.FromToColorPairs = FromToColorPairs
+    }
+
+    fun setDisableLoop(disableLoop: Boolean) {
+        this.disableLoop = disableLoop
     }
 
     fun getAllColorCount(index: Int?): List<ColorCount> {

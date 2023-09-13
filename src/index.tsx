@@ -36,6 +36,7 @@ export const GifControllerView = forwardRef<
     isAnimating: true,
     isReverse: false,
     speed: 1,
+    disableLoop: false,
     ...props,
     source: resolveAssetSource(props.source).uri,
   };
@@ -68,7 +69,6 @@ export const GifControllerView = forwardRef<
       to: processColor(item.to),
     };
   });
-
   return (
     <GifImageView
       {...imageProps}

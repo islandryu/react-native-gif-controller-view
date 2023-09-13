@@ -14,6 +14,7 @@ class GifControllerView(context: Context, attrs: AttributeSet? = null) : android
     private var isAnimating: Boolean = true
     private var isReverse: Boolean = false
     private var speed: Float? = null
+    private var disableLoop: Boolean = false
 
     fun setSource(source: String) {
         GlobalScope.launch(Dispatchers.Main) {
@@ -32,6 +33,7 @@ class GifControllerView(context: Context, attrs: AttributeSet? = null) : android
             } else {
                 gifDrawable?.stop()
             }
+            gifDrawable?.setDisableLoop(disableLoop)
         }
     }
 
@@ -83,5 +85,10 @@ class GifControllerView(context: Context, attrs: AttributeSet? = null) : android
 
     public fun getFrameData(): List<AnimatedGifDrawable.FrameData>? {
         return gifDrawable?.getFrameData()
+    }
+
+    public fun setDisableLoop(disableLoop: Boolean) {
+        this.disableLoop = disableLoop
+        gifDrawable?.setDisableLoop(disableLoop)
     }
 }

@@ -30,6 +30,8 @@ class GifControllerView: UIImageView {
   var fromToColorSet: [ColorSet] = []
   let color = CIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1.0)
   let context = CIContext(options: nil)
+  var disableLoop = false
+  var isWaiting = false
   
   
   // Initializer
@@ -40,7 +42,9 @@ class GifControllerView: UIImageView {
   @objc func setSource(_ gifUrl: String) {
     guard let gifUrl = URL(string: gifUrl) else {return}
     createGifSource(from: gifUrl)
-    updateFrame()
+    if(!isWaiting) {
+        updateFrame()
+    }
   }
   @objc func setColorMappings(_ colorMappings: NSArray) {
     guard let array = colorMappings as? [[String: NSNumber]] else { return }
@@ -84,6 +88,7 @@ class GifControllerView: UIImageView {
     }
     
     private func updateFrame() {
+        isWaiting = false
         if(gifSource == nil) {return}
         if(isReverse) {
             index = (index - 1 + frameCount) % frameCount
@@ -92,10 +97,24 @@ class GifControllerView: UIImageView {
         }
         displayFrame(at:index)
         let delayTime = getDelayTime(for: self.gifSource!, index: index)
-        if(isAnimatingGif) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + (delayTime ?? 1.0) * speed) {[weak self] in
-                self?.updateFrame()
-            }
+        var isEnd = false;
+        if(isReverse) {
+            isEnd = index == 0
+            
+        } else {
+            isEnd = index == frameCount - 1
+            
+        };
+        if(isEnd && disableLoop) {
+            return
+        }
+        if(!isAnimatingGif) {
+            return
+
+        } 
+        isWaiting = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + (delayTime ?? 1.0) * speed) {[weak self] in
+            self?.updateFrame()
         }
     }
     
@@ -120,7 +139,9 @@ class GifControllerView: UIImageView {
     
     func startGif (){
         isAnimatingGif = true
-        updateFrame()
+        if(!isWaiting){
+            updateFrame()
+        }
     }
     
     func stopGif() {
@@ -131,6 +152,9 @@ class GifControllerView: UIImageView {
         if(frame < 0 || frame >= frameCount) {throw NSError(domain: "frame out of range", code: 0, userInfo: nil)}
         displayFrame(at: frame)
         index = frame
+        if(!isWaiting) {
+            updateFrame()
+        }
     }
     
     private func presetImage(_ ciImage: CIImage) {
@@ -231,6 +255,10 @@ class GifControllerView: UIImageView {
       } else {
         stopGif()
       }
+    }
+
+    @objc func setDisableLoop(_ disableLoop: Bool) {
+        self.disableLoop = disableLoop
     }
 
     func getFrameData() -> [FrameData] {

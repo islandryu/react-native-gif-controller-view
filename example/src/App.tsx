@@ -10,6 +10,7 @@ function App() {
   const [colorMappings, setColorMappings] = useState<
     { from: string; to: string }[]
   >([]);
+  const [disableLoop, setDisableLoop] = useState(false);
   const controllerViewRef = useRef<GifControllerViewRef>(null);
 
   const toggleAnimation = () => {
@@ -42,6 +43,7 @@ function App() {
         speed={speed}
         isReverse={isReverse}
         isAnimating={isAnimating}
+        disableLoop={disableLoop}
       />
       <View style={styles.buttons}>
         <Button
@@ -64,6 +66,10 @@ function App() {
             const frameData = await controllerViewRef.current?.getFrameData();
             console.log(frameData);
           }}
+        />
+        <Button
+          title={disableLoop ? 'Enable Loop' : 'Disable Loop'}
+          onPress={() => setDisableLoop(!disableLoop)}
         />
       </View>
     </View>

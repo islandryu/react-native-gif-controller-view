@@ -55,7 +55,7 @@ class GifControllerViewManager : SimpleViewManager<GifControllerView>() {
             view.stop()
         }
     }
-    
+
     @ReactProp(name = "isReverse")
     fun setIsReverse(view: GifControllerView, isReverse: Boolean) {
         view.setIsReverse(isReverse)
@@ -64,5 +64,10 @@ class GifControllerViewManager : SimpleViewManager<GifControllerView>() {
     @ReactProp(name = "speed")
     fun setSpeed(view: GifControllerView, speed: Float) {
         view.setSpeed(1 / speed)
+    }
+
+    @ReactProp(name = "disableLoop")
+    fun setDisableLoop(view: GifControllerView, disableLoop: Boolean) {
+        view.setDisableLoop(disableLoop)
     }
 }

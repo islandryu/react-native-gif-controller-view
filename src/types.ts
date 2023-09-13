@@ -9,6 +9,7 @@ export type GifControllerViewProps = {
   isAnimating?: boolean;
   isReverse?: boolean;
   speed?: number;
+  disableLoop?: boolean;
 };
 
 export type GifControllerViewRef = {
